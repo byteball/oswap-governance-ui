@@ -1,4 +1,3 @@
-
 const CracoLessPlugin = require('craco-less');
 
 const bg_color = "#24292F";
