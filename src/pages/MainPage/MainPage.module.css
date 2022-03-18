@@ -1,0 +1,15 @@
+.dataLoaderWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: calc(50vh - 158px);
+}
+
+.poolLoaderWrap {
+  display: flex;
+  justify-content: center;
+}
+
+.changeParamsWrap{
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
