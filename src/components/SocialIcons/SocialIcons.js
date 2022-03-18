@@ -56,7 +56,7 @@ export const SocialIcons = ({ size = "full", centered = false }) => { // type fu
     {
       name: "github",
       icon: faGithub,
-      link: "https://github.com/byteball/counterstake-sdk"
+      link: "https://github.com/byteball/oswap-governance-ui"
     },
   ];
 

@@ -3,7 +3,7 @@ export const paramList = {
     shortName: "Swap fee",
     description: "Swapping fee, percentage of traded amount.",
     validator: (value) => value < 1 && value >= 0,
-    rule: "The value of the swap_fee parameter must be positive and less than to 100.",
+    rule: "The value of the swap_fee parameter must be positive and less than 100.",
     isPercentage: true,
     initValue: 0.003
   },
@@ -11,7 +11,7 @@ export const paramList = {
     shortName: "Exit fee",
     description: "Fee charged when removing liquidity from the pool.",
     validator: (value) => value < 1 && value >= 0,
-    rule: "The value of the exit_fee parameter must be positive and less than to 100.",
+    rule: "The value of the exit_fee parameter must be positive and less than 100.",
     isPercentage: true,
     initValue: 0.005
   },
@@ -27,7 +27,7 @@ export const paramList = {
     shortName: "Leverage profit tax",
     description: "Percentage of profit charged from a leveraged position when it is closed (if the close price is higher than the open price).",
     validator: (value) => value < 1 && value >= 0,
-    rule: "The value of the leverage_profit_tax parameter must be positive and less than to 100.",
+    rule: "The value of the leverage_profit_tax parameter must be positive and less than 100.",
     isPercentage: true,
     initValue: 0
   },
@@ -35,7 +35,7 @@ export const paramList = {
     shortName: "Leverage token tax",
     description: "Percentage of the redeemed amount charged when redeeming a leveraged token.",
     validator: (value) => value < 1 && value >= 0,
-    rule: "The value of the leverage_token_tax parameter must be positive and less than to 100.",
+    rule: "The value of the leverage_token_tax parameter must be positive and less than 100.",
     isPercentage: true,
     initValue: 0
   },
@@ -43,21 +43,21 @@ export const paramList = {
     shortName: "Mid-price",
     description: "Medium price for stablecoin pairs.",
     validator: (value) => Number(value) > 0,
-    rule: "The value of the mid_price parameter must be greater than to 0.",
+    rule: "The value of the mid_price parameter must be greater than 0.",
     initValue: 0
   },
   price_deviation: {
     shortName: "Price deviation",
     description: "Deviation from the mid-price. Stablecoin pairs trade within a limited range determined by the price deviation.",
     validator: (value) => Number(value) > 1,
-    rule: "The value of the base_interest_rate parameter must be greater than to 1.",
+    rule: "The value of the price_deviation parameter must be greater than 1.",
     initValue: 0
   },
   base_interest_rate: {
     shortName: "Base interest rate",
     description: "Base interest rate charged from leveraged positions. If there are many leveraged positions, the rate can increase depending on utilization.",
     validator: (value) => value >= 0,
-    rule: "The value of the base_interest_rate parameter must be greater than or equal to 0",
+    rule: "The value of the base_interest_rate parameter must be greater than or equal 0",
     isPercentage: true,
     initValue: 0.2
   },
@@ -79,7 +79,7 @@ export const paramList = {
       return true;
 
     },
-    rule: "The value of the pool_leverage parameter must be greater than or equal to 1. Can't be equal to 1 / (Pool weights) or 1 / (100 - (Pool weights)).",
+    rule: "The value of the pool_leverage parameter must be greater than or equal to 1. Can't be equal to 1 / (Pool weight) or 1 / (1 - (Pool weight)).",
     initValue: 1
   },
   alpha: {
@@ -90,7 +90,7 @@ export const paramList = {
 
       return value > 0 && value < 1 && (value !== 1 / lambda) && ((1 - value) !== 1 / lambda)
     },
-    rule: "The value of the alpha parameter must be positive and less than to 100. Can't be equal to 1 / (Pool weights) or 1 / (100 - (Pool weights)).",
+    rule: "The value of the alpha parameter must be positive and less than 100. Pool leverage can't be equal to 1 / (Pool weight) or 1 / (1 - (Pool weight)).",
     initValue: 0.5,
     isPercentage: true
   },
