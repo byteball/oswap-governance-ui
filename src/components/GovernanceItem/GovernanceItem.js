@@ -72,7 +72,6 @@ export const GovernanceItem = (props) => {
   }));
 
   const commitLink = generateLink({
-    asset: voteTokenAddress,
     amount: 1e4,
     data: {
       name, commit: 1
@@ -83,7 +82,6 @@ export const GovernanceItem = (props) => {
   });
 
   const linkRemoveSupport = generateLink({
-    asset: voteTokenAddress,
     amount: 1e4,
     data: {
       name

@@ -72,9 +72,9 @@ export const MainPage = () => {
   if (status === "loading") return <div className={styles.dataLoaderWrap}><Spin size="large" /></div>
 
   return <div>
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 40, flexDirection: moveToNewLine ? "column" : "row" }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 40, flexDirection: moveToNewLine ? "column" : "row", backgroundColor: !moveToNewLine ? "#24292F" : "transparent", borderRadius: 25 }}>
       <SelectPool disabled={activePoolStatus === "loading"} styles={{ width: `${moveToNewLine ? 100 : 90}%` }} />
-      <div style={{ width: moveToNewLine ? "100%" : "10%", padding: 5, textAlign: "center" }}>
+      <div style={{ width: moveToNewLine ? "100%" : "15%", paddingRight: 15, textAlign: "center" }}>
         <a target="_blank" rel="noopener" href={activePool?.address ? `${process.env.REACT_APP_STATS_LINK}/pool/${activePool.address}` : process.env.REACT_APP_STATS_LINK}>
           View stats
         </a>
