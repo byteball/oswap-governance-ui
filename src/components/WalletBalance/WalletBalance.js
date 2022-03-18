@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { AddWalletModal } from "modals/AddWalletModal";
 import { selectActivePool } from "store/slices/poolsSlice";
 import { selectWallet } from "store/slices/settingsSlice";
+import { WithdrawGovernanceSupportModal } from "modals/WithdrawGovernanceSupportModal";
 
 import styles from "./WalletBalance.module.css";
-import { WithdrawGovernanceSupportModal } from "modals/WithdrawGovernanceSupportModal";
 
 export const WalletBalance = () => {
   const walletAddress = useSelector(selectWallet);
