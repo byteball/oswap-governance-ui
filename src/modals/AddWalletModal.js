@@ -22,7 +22,18 @@ export const AddWalletModal = ({ children }) => {
     setIsModalVisible(false);
   };
 
-  const saveWallet = () => dispatch(changeWallet(wallet.value));
+  const saveWallet = () => {
+    dispatch(changeWallet(wallet.value));
+    handleCancel();
+  };
+
+  const handleKeyPress = (ev) => {
+    if (ev.key === "Enter") {
+      if (wallet.valid) {
+        saveWallet();
+      }
+    }
+  }
 
   useEffect(() => {
     if (isModalVisible) {
@@ -58,7 +69,7 @@ export const AddWalletModal = ({ children }) => {
       <Form>
         <Form.Item extra={<Typography.Text type="danger">{wallet.value && !wallet.valid ? "Wallet address isn't valid" : ""}</Typography.Text>}>
           <span style={{ fontSize: 16, color: "#3F474D", fontWeight: "bold" }}>Wallet address</span>
-          <Input ref={ref} style={{ padding: 0, borderRadius: 0, fontSize: 28 }} value={wallet.value} bordered={false} size="large" placeholder="VYC2LXE..." onChange={handleChangeWallet} />
+          <Input ref={ref} style={{ padding: 0, borderRadius: 0, fontSize: 28 }} value={wallet.value} bordered={false} size="large" placeholder="VYC2LXE..." onChange={handleChangeWallet} onKeyPress={handleKeyPress} />
           <small><a href="https://obyte.org/#download" target="_blank">Install Obyte wallet</a> if you don't have one yet, and copy/paste your address here.</small>
         </Form.Item>
       </Form>

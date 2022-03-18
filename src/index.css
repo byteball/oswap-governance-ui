@@ -34,3 +34,7 @@ body {
 .ant-input-affix-wrapper-lg, .ant-alert {
   border-radius: 20px !important;
 }
+
+.ant-message-notice-content {
+  border-radius: 20px !important;
+}
