@@ -30,7 +30,7 @@ const viewParam = ({ value, name }) => {
 /* eslint-disable eqeqeq */
 
 export const GovernanceItem = (props) => {
-  const { name, value, activeGovernance, choice, leader, voteTokenDecimals, voteTokenAddress, voteTokenSymbol, challenging_period, freeze_period, supports = {}, challenging_period_start_ts, change, balance, activeWallet } = props;
+  const { name, value, activeGovernance, choice, leader, voteTokenDecimals, voteTokenSymbol, challenging_period, freeze_period, supports = {}, challenging_period_start_ts, change, balance, activeWallet } = props;
 
   const description = paramList[name]?.description || "No description";
   const rule = paramList[name]?.rule || "No rule";
@@ -72,7 +72,6 @@ export const GovernanceItem = (props) => {
   }));
 
   const commitLink = generateLink({
-    asset: voteTokenAddress,
     amount: 1e4,
     data: {
       name, commit: 1
@@ -83,7 +82,6 @@ export const GovernanceItem = (props) => {
   });
 
   const linkRemoveSupport = generateLink({
-    asset: voteTokenAddress,
     amount: 1e4,
     data: {
       name

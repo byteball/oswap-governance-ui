@@ -6,6 +6,7 @@ const AppRouter = () => {
     <Routes>
       <Route path="/">
         <Route index element={<MainPage />} />
+        <Route path=":pool" element={<MainPage />} />
       </Route>
     </Routes>
   </BrowserRouter>
