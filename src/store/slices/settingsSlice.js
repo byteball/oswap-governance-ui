@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const MAX_LENGTH_RECENT_LIST = 4;
+export const MAX_LENGTH_RECENT_LIST = 5;
 
 export const settingsSlice = createSlice({
   name: 'settings',
