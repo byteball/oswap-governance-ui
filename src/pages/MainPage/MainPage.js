@@ -51,7 +51,7 @@ export const MainPage = () => {
             if (pool in pools) {
               dispatch(changeActivePool(pool));
             } else {
-              message.error({ content: "This pool is'n found!", duration: 5 })
+              message.error({ content: "Pool not found!", duration: 5 })
             }
           } else {
             message.error({ content: "Pool address is invalid", duration: 5 })

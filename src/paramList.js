@@ -95,8 +95,8 @@ export const paramList = {
     isPercentage: true
   },
   period_length: {
-    shortName: "Period length for merging trades",
-    description: "Period (in seconds) during which the consecutive trades from the same user are merged while calculating the arbitrageur tax.",
+    shortName: "Period length for tracking min/max prices",
+    description: "Period (in seconds) during which minimum and maximum prices are tracked. They are used in liquidity adds/removals in order to prevent manipulation.",
     validator: (value) => Number.isInteger(Number(value)) && value >= 0,
     rule: "The value of the period_length parameter must be integer greater than or equal to 0.",
     initValue: 3600
