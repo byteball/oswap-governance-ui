@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { GovernanceItem } from "components/GovernanceItem/GovernanceItem";
 import { paramList } from "paramList";
 
-export const GovernanceList = ({ governance_state, poolDefParams, paramsInfo, activeGovernance, voteTokenDecimals, voteTokenSymbol, voteTokenAddress, freeze_period, challenging_period, activeWallet, balance, mid_price_decimals, max_decimals, x_symbol, y_symbol }) => {
+export const GovernanceList = ({ governance_state, poolDefParams, paramsInfo, activeGovernance, voteTokenDecimals, voteTokenSymbol, voteTokenAddress, freeze_period, challenging_period, activeWallet, balance, mid_price_decimals, x_symbol, y_symbol }) => {
   const [data, setData] = useState([]);
   const [allActualParams, setAllActualParams] = useState(null);
 
@@ -53,7 +53,6 @@ export const GovernanceList = ({ governance_state, poolDefParams, paramsInfo, ac
         allActualParams={allActualParams}
         freeze_period={freeze_period}
         mid_price_decimals={mid_price_decimals}
-        max_decimals={max_decimals}
         x_symbol={x_symbol}
         y_symbol={y_symbol}
         challenging_period={challenging_period}

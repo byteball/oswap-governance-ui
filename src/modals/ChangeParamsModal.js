@@ -10,7 +10,7 @@ const { Text, Paragraph } = Typography;
 
 const f = (x) => (~(x + "").indexOf(".") ? (x + "").split(".")[1].length : 0);
 
-export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, governance_state, actualValue, description, name, activeGovernance, voteTokenAddress, voteTokenDecimals, voteTokenSymbol, balance = 0, isMyChoice, activeWallet, disabled, mid_price_decimals, max_decimals, allActualParams, x_symbol, y_symbol }) => {
+export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, governance_state, actualValue, description, name, activeGovernance, voteTokenAddress, voteTokenDecimals, voteTokenSymbol, balance = 0, isMyChoice, activeWallet, disabled, mid_price_decimals, allActualParams, x_symbol, y_symbol }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const btnRef = useRef();
   const isPercentage = paramList[name].isPercentage;
@@ -79,7 +79,7 @@ export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, go
     if (isPercentage && supportedValue !== undefined) {
       transformedValue = supportedValue * 100
     } if (name === "mid_price"){
-      transformedValue = +Number(supportedValue / 10 ** mid_price_decimals).toFixed(max_decimals)
+      transformedValue = +Number(supportedValue / 10 ** mid_price_decimals).toPrecision(6);
     } else {
       transformedValue = supportedValue
     }

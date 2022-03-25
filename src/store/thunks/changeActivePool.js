@@ -92,7 +92,6 @@ export const changeActivePool = createAsyncThunk(
     let mid_price_decimals;
     let x_decimals;
     let y_decimals;
-    let max_decimals;
 
     if (mid_price !== 0) {
       try {
@@ -108,7 +107,6 @@ export const changeActivePool = createAsyncThunk(
       }
 
       mid_price_decimals = y_decimals - x_decimals;
-      max_decimals = x_decimals > y_decimals ? x_decimals : y_decimals;
     }
 
     return {
@@ -127,7 +125,6 @@ export const changeActivePool = createAsyncThunk(
       defParams: def_governance_params,
       challenging_period,
       freeze_period,
-      mid_price_decimals,
-      max_decimals
+      mid_price_decimals
     };
   })
