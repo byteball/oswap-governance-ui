@@ -4,16 +4,25 @@ import { useEffect, useState } from "react";
 import { GovernanceItem } from "components/GovernanceItem/GovernanceItem";
 import { paramList } from "paramList";
 
-export const GovernanceList = ({ governance_state, poolDefParams, paramsInfo, activeGovernance, voteTokenDecimals, voteTokenSymbol, voteTokenAddress, freeze_period, challenging_period, activeWallet, balance }) => {
+export const GovernanceList = ({ governance_state, poolDefParams, paramsInfo, activeGovernance, voteTokenDecimals, voteTokenSymbol, voteTokenAddress, freeze_period, challenging_period, activeWallet, balance, mid_price_decimals, x_symbol, y_symbol }) => {
   const [data, setData] = useState([]);
+  const [allActualParams, setAllActualParams] = useState(null);
 
   useEffect(async () => {
     setData([]);
+    const allActualParams = {};
+
+    Object.keys(paramsInfo).forEach((name) => {
+      allActualParams[name] = (name in governance_state) ? governance_state[name] : ((name in poolDefParams) ? poolDefParams[name] : paramList[name].initValue);
+    })
+
+    setAllActualParams(allActualParams);
+
     const data = Object.keys(paramsInfo).map((name) => ({
       name,
       ...paramsInfo[name],
       choice: paramsInfo[name]?.choices?.[activeWallet],
-      value: (name in governance_state) ? governance_state[name] : ((name in poolDefParams) ? poolDefParams[name] : paramList[name].initValue)
+      value: allActualParams[name]
     }))
 
 
@@ -29,7 +38,7 @@ export const GovernanceList = ({ governance_state, poolDefParams, paramsInfo, ac
     setData(filetedData);
   }, [paramsInfo, balance, activeWallet, governance_state]);
 
-  if (data.length === 0) return <div style={{ padding: 30, display: "flex", justifyContent: "center", width: "100%" }}>
+  if (data.length === 0 || allActualParams === null) return <div style={{ padding: 30, display: "flex", justifyContent: "center", width: "100%" }}>
     <Spin size="large" />
   </div>
 
@@ -41,7 +50,11 @@ export const GovernanceList = ({ governance_state, poolDefParams, paramsInfo, ac
         voteTokenSymbol={voteTokenSymbol}
         voteTokenAddress={voteTokenAddress}
         activeGovernance={activeGovernance}
+        allActualParams={allActualParams}
         freeze_period={freeze_period}
+        mid_price_decimals={mid_price_decimals}
+        x_symbol={x_symbol}
+        y_symbol={y_symbol}
         challenging_period={challenging_period}
         governance_state={governance_state}
         balance={balance}

@@ -43,3 +43,7 @@ body {
 .ant-message-notice-content {
   border-radius: 20px !important;
 }
+
+.ant-input {
+  border-radius: 0 !important;
+}

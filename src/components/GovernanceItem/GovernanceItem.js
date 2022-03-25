@@ -16,10 +16,12 @@ import styles from "./GovernanceItem.module.css";
 const linkStyles = { padding: 0 };
 const { Countdown } = Statistic;
 
-const viewParam = ({ value, name }) => {
+const viewParam = ({ value, name, mid_price_decimals }) => {
   if (name === "alpha") {
     const inPercent = +Number(value * 100).toFixed(4);
     return `${inPercent}% / ${100 - inPercent}%`;
+  } if (name === "mid_price" && mid_price_decimals !== undefined){
+    return +Number(value / 10 ** mid_price_decimals).toPrecision(6);
   } else if (paramList[name]?.isPercentage) {
     return +Number(value * 100).toFixed(4) + " %";
   } else {
@@ -30,14 +32,14 @@ const viewParam = ({ value, name }) => {
 /* eslint-disable eqeqeq */
 
 export const GovernanceItem = (props) => {
-  const { name, value, activeGovernance, choice, leader, voteTokenDecimals, voteTokenSymbol, challenging_period, freeze_period, supports = {}, challenging_period_start_ts, change, balance, activeWallet } = props;
+  const { name, value, activeGovernance, choice, leader, voteTokenDecimals, voteTokenSymbol, challenging_period, freeze_period, supports = {}, challenging_period_start_ts, change, balance, activeWallet, mid_price_decimals } = props;
 
   const description = paramList[name]?.description || "No description";
   const rule = paramList[name]?.rule || "No rule";
 
-  const valueView = viewParam({ name, value });
-  const choiceView = viewParam({ name, value: choice });
-  const leaderView = viewParam({ name, value: leader });
+  const valueView = viewParam({ name, value, mid_price_decimals });
+  const choiceView = viewParam({ name, value: choice, mid_price_decimals });
+  const leaderView = viewParam({ name, value: leader, mid_price_decimals });
 
   const [width] = useWindowSize();
 
