@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { paramList } from "paramList";
 import client from "services/obyte";
 import { addRecentPool } from "store/slices/settingsSlice";
 import { parseGovernanceStateVars } from "utils/parseGovernanceStateVars";
@@ -25,6 +26,8 @@ export const changeActivePool = createAsyncThunk(
       aa: governance_aa
     });
 
+    const tokenRegistryAddress = client.api.getOfficialTokenRegistryAddress();
+
     let governanceState = {};
 
     let challenging_period;
@@ -42,8 +45,6 @@ export const changeActivePool = createAsyncThunk(
     const poolDefParams = pool_aa[1]?.params || {}
 
     if (voteTokenAddress) {
-      const tokenRegistryAddress = client.api.getOfficialTokenRegistryAddress();
-
       try {
         voteTokenSymbol = await client.api.getSymbolByAsset(tokenRegistryAddress, voteTokenAddress);
         voteTokenDecimals = await client.api.getDecimalsBySymbolOrAsset(tokenRegistryAddress, voteTokenAddress);
@@ -86,10 +87,36 @@ export const changeActivePool = createAsyncThunk(
     challenging_period = def_governance_params?.challenging_period || 3 * 24 * 60 * 60;
     freeze_period = def_governance_params?.freeze_period || 30 * 24 * 60 * 60;
 
+    const mid_price = ("mid_price" in governanceStateVars) ? governanceStateVars["mid_price"] : (("mid_price" in poolDefParams) ? poolDefParams.mid_price : paramList.mid_price.initValue);
+    
+    let mid_price_decimals;
+    let x_decimals;
+    let y_decimals;
+    let max_decimals;
+
+    if (mid_price !== 0) {
+      try {
+        x_decimals = await client.api.getDecimalsBySymbolOrAsset(tokenRegistryAddress, poolDefParams.x_asset);
+      } catch {
+        x_decimals = 0;
+      }
+
+      try {
+        y_decimals = await client.api.getDecimalsBySymbolOrAsset(tokenRegistryAddress, poolDefParams.y_asset);
+      } catch {
+        y_decimals = 0;
+      }
+
+      mid_price_decimals = y_decimals - x_decimals;
+      max_decimals = x_decimals > y_decimals ? x_decimals : y_decimals;
+    }
+
     return {
       address,
       governance_state: governanceStateVars,
       pool_asset: knownData.pool_asset,
+      x_symbol: knownData.x_symbol,
+      y_symbol: knownData.y_symbol,
       governance_aa,
       balances,
       paramsInfo,
@@ -100,5 +127,7 @@ export const changeActivePool = createAsyncThunk(
       defParams: def_governance_params,
       challenging_period,
       freeze_period,
+      mid_price_decimals,
+      max_decimals
     };
   })

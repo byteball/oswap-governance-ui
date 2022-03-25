@@ -101,6 +101,10 @@ export const MainPage = () => {
           balance={activePool?.balances[activeWallet]}
           governance_state={activePool?.governance_state}
           poolDefParams={activePool?.poolDefParams}
+          mid_price_decimals={activePool?.mid_price_decimals}
+          max_decimals={activePool?.max_decimals}
+          x_symbol={activePool?.x_symbol}
+          y_symbol={activePool?.y_symbol}
         />
       </div>
     </>}

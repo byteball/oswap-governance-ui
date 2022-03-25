@@ -10,10 +10,12 @@ const { Text, Paragraph } = Typography;
 
 const f = (x) => (~(x + "").indexOf(".") ? (x + "").split(".")[1].length : 0);
 
-export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, governance_state, actualValue, description, name, activeGovernance, voteTokenAddress, voteTokenDecimals, voteTokenSymbol, balance = 0, isMyChoice, activeWallet, disabled }) => {
+export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, governance_state, actualValue, description, name, activeGovernance, voteTokenAddress, voteTokenDecimals, voteTokenSymbol, balance = 0, isMyChoice, activeWallet, disabled, mid_price_decimals, max_decimals, allActualParams, x_symbol, y_symbol }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const btnRef = useRef();
   const isPercentage = paramList[name].isPercentage;
+  const showPriceRange = name === 'mid_price' || name === 'price_deviation';
+  const { alpha, mid_price, price_deviation } = allActualParams;
 
   const [paramValue, setParamValue] = useState({
     value: "",
@@ -76,6 +78,8 @@ export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, go
     let transformedValue = supportedValue;
     if (isPercentage && supportedValue !== undefined) {
       transformedValue = supportedValue * 100
+    } if (name === "mid_price"){
+      transformedValue = +Number(supportedValue / 10 ** mid_price_decimals).toFixed(max_decimals)
     } else {
       transformedValue = supportedValue
     }
@@ -98,6 +102,8 @@ export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, go
 
   if (isPercentage) {
     sentValue = +Number(sentValue / 100).toFixed(6)
+  } else if (name === "mid_price") {
+    sentValue = sentValue * 10 ** mid_price_decimals;
   }
 
   const link = generateLink({
@@ -119,6 +125,24 @@ export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, go
       if (finalSupport !== 0 && paramValue.valid) {
         btnRef.current.click();
       }
+    }
+  }
+
+  let p_min;
+  let p_max;
+
+  if (showPriceRange) {
+    const pd = name === "price_deviation" && paramValue.valid ? Number(sentValue) : price_deviation;
+    const mp = (name === "mid_price" && paramValue.valid ? Number(sentValue) : mid_price) / 10 ** mid_price_decimals;
+
+    const beta = 1 - alpha;
+
+    if (mp === 0 || pd === 0) {
+      p_max = "Infinity";
+      p_min = 0;
+    } else {
+      p_max = (alpha / beta * pd ** (1 / beta) * mp).toPrecision(6);
+      p_min = (alpha / beta / pd ** (1 / beta) * mp).toPrecision(6);
     }
   }
 
@@ -178,6 +202,10 @@ export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, go
             />
           </Form.Item>
 
+          {showPriceRange && <Paragraph>
+            <Text>Price range from {p_min} to {p_max} {y_symbol} for 1 {x_symbol}</Text>
+          </Paragraph>}
+          
           {balance !== 0 && balance !== "0" ? <Text type="secondary">Add more funds (optional):</Text> : <Text type="secondary">Amount to vote with</Text>}
           <Form.Item>
             <Input
