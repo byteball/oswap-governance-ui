@@ -1,7 +1,7 @@
 import { encodeData } from "./encodeData";
 
 const suffixes = {
-  mainnet: "",
+  livenet: "",
   testnet: "-tn"
 };
 const suffix = suffixes[process.env.REACT_APP_ENVIRONMENT];
