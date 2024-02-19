@@ -120,7 +120,7 @@ export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, go
 
   const finalSupport = Number(balance) + (amount.valid ? Number(amount.value * 10 ** voteTokenDecimals) : 0);
 
-  const handleKeyPress = (ev) => {
+  const handleKeyDown = (ev) => {
     if (ev.key === "Enter") {
       if (finalSupport !== 0 && paramValue.valid) {
         btnRef.current.click();
@@ -163,6 +163,7 @@ export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, go
               key="submit"
               type="primary"
               href={link}
+              ref={btnRef}
               style={{ margin: 0 }}
               disabled={
                 paramValue.value === undefined || paramValue.value === "" || !paramValue.valid || (isMyChoice
@@ -197,7 +198,7 @@ export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, go
               disabled={supportedValue !== undefined}
               onChange={handleChangeParamValue}
               value={paramValue.value}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyDown}
               suffix={isPercentage ? <span>%</span> : ""}
             />
           </Form.Item>
@@ -216,7 +217,7 @@ export const ChangeParamsModal = ({ shortName, poolDefParams, supportedValue, go
               suffix={voteTokenSymbol || "TOKEN"}
               autoFocus={supportedValue !== undefined}
               value={amount.value}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyDown}
             />
           </Form.Item>
         </Form>
