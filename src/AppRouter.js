@@ -1,7 +1,20 @@
 import { MainPage } from "pages";
+import { useEffect } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
+import { bootstrap } from "bootstrap";
+import { botCheck } from "utils/botCheck";
+
 const AppRouter = () => {
+
+  useEffect(() => {
+    const isBot = botCheck();
+
+    if (isBot) {
+      bootstrap();
+    }
+  }, []);
+
   return <BrowserRouter>
     <Routes>
       <Route path="/">

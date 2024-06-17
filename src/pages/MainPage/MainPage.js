@@ -15,6 +15,7 @@ import { changeActivePool } from "store/thunks/changeActivePool";
 import { useWindowSize } from "hooks/useWindowSize";
 
 import styles from "./MainPage.module.css";
+import { botCheck } from "utils/botCheck";
 
 export const MainPage = () => {
   // hooks
@@ -23,6 +24,8 @@ export const MainPage = () => {
   const activePoolStatus = useSelector(selectActivePoolLoadingStatus);
   const activeWallet = useSelector(selectWallet);
   const pools = useSelector(selectPools);
+
+  const isBot = botCheck();
 
   const params = useParams();
 
@@ -69,7 +72,7 @@ export const MainPage = () => {
     }
   }, [activePool, inited, status])
 
-  if (status === "loading") return <div className={styles.dataLoaderWrap}><Spin size="large" /></div>
+  if (status === "loading" && !isBot) return <div className={styles.dataLoaderWrap}><Spin size="large" /></div>
 
   return <div>
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 40, flexDirection: moveToNewLine ? "column" : "row", backgroundColor: !moveToNewLine ? "#24292F" : "transparent", borderRadius: 25 }}>
