@@ -1,20 +1,20 @@
 import { Select } from "antd";
 import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { selectActivePool, selectPools } from "store/slices/poolsSlice";
 import { MAX_LENGTH_RECENT_LIST, selectRecentPools } from "store/slices/settingsSlice";
-import { changeActivePool } from "store/thunks/changeActivePool";
 
 import { paramList } from "paramList";
+import { useNavigate } from "react-router-dom";
 
 export const SelectPool = ({ styles, disabled }) => {
   // hooks
-  const dispatch = useDispatch();
-
   const pools = useSelector(selectPools);
   const recentPools = useSelector(selectRecentPools);
   const activePool = useSelector(selectActivePool);
+
+  const navigate = useNavigate();
 
   const ref = useRef(null);
 
@@ -25,7 +25,7 @@ export const SelectPool = ({ styles, disabled }) => {
 
   //handles
   const handleChangePool = (pool) => {
-    dispatch(changeActivePool(pool));
+    navigate(`/${pool}`);
     ref.current.blur();
   }
 

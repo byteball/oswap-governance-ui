@@ -1,8 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { paramList } from "paramList";
+import http from "services/http";
 import client from "services/obyte";
 import { addRecentPool } from "store/slices/settingsSlice";
+import { botCheck } from "utils/botCheck";
 import { parseGovernanceStateVars } from "utils/parseGovernanceStateVars";
 
 
@@ -12,19 +14,35 @@ export const changeActivePool = createAsyncThunk(
   async (address, { getState, dispatch }) => {
     const store = getState();
 
+    const isBot = botCheck();
+
     const knownData = store.pools.pools?.[address];
 
-    const poolState = await client.api.getAaStateVars({ address });
+    let poolState = {};
+
+    if (isBot) {
+      poolState = await http.getStateVars(address);
+    } else {
+      poolState = await client.api.getAaStateVars({ address });
+    }
 
     const { governance_aa } = poolState;
 
-    const governanceStateVars = await client.api.getAaStateVars({ address: governance_aa });
+    let governanceStateVars = {};
+
+    if (isBot) {
+      governanceStateVars = await http.getStateVars(governance_aa);
+    } else {
+      governanceStateVars = await client.api.getAaStateVars({ address: governance_aa });
+    }
 
     dispatch(addRecentPool(address));
 
-    await client.justsaying("light/new_aa_to_watch", {
-      aa: governance_aa
-    });
+    if (!isBot) {
+      await client.justsaying("light/new_aa_to_watch", {
+        aa: governance_aa
+      });
+    }
 
     const tokenRegistryAddress = client.api.getOfficialTokenRegistryAddress();
 
@@ -40,30 +58,55 @@ export const changeActivePool = createAsyncThunk(
     let voteTokenDecimals = 0;
     let voteTokenSymbol = voteTokenAddress;
 
-    const pool_aa = await client.api.getDefinition(address);
+    let pool_aa;
+
+    if (isBot) {
+      pool_aa = await http.getDefinition(address);
+    } else {
+      pool_aa = await client.api.getDefinition(address);
+    }
+
 
     const poolDefParams = pool_aa[1]?.params || {}
 
     if (voteTokenAddress) {
       try {
-        voteTokenSymbol = await client.api.getSymbolByAsset(tokenRegistryAddress, voteTokenAddress);
-        voteTokenDecimals = await client.api.getDecimalsBySymbolOrAsset(tokenRegistryAddress, voteTokenAddress);
+        if (isBot) {
+          voteTokenSymbol = await http.getSymbolByAsset(tokenRegistryAddress, voteTokenAddress);
+          voteTokenDecimals = await http.getDecimalsBySymbolOrAsset(tokenRegistryAddress, voteTokenAddress);
+        } else {
+          voteTokenSymbol = await client.api.getSymbolByAsset(tokenRegistryAddress, voteTokenAddress);
+          voteTokenDecimals = await client.api.getDecimalsBySymbolOrAsset(tokenRegistryAddress, voteTokenAddress);
+        }
+
       } catch { }
     } else {
       // error
       return null;
     }
-    
+
     try {
-      governanceState = (await client.api.getAaStateVars({
-        address: governance_aa,
-      }));
+      if (isBot) {
+        governanceState = await http.getStateVars(governance_aa);
+      } else {
+        governanceState = (await client.api.getAaStateVars({
+          address: governance_aa,
+        }));
+      }
+
       let lastKey = "";
       while (true) {
-        const chunkData = (await client.api.getAaStateVars({
-          address: governance_aa,
-          var_prefix_from: lastKey
-        }));
+        let chunkData;
+
+        if (isBot) {
+          chunkData = await http.getStateVars(governance_aa, undefined, lastKey);
+        } else {
+          chunkData = (await client.api.getAaStateVars({
+            address: governance_aa,
+            var_prefix_from: lastKey
+          }));
+        }
+
         const keys = Object.keys(chunkData);
         if (keys.length > 1) {
           governanceState = { ...governanceState, ...chunkData };
@@ -81,27 +124,43 @@ export const changeActivePool = createAsyncThunk(
     balances = data.balances;
     paramsInfo = data.paramsInfo;
 
-    const def_governance = await client.api.getDefinition(governance_aa);
+
+    let def_governance;
+
+    if (isBot) {
+      def_governance = await http.getDefinition(governance_aa);
+    } else {
+      def_governance = await client.api.getDefinition(governance_aa);
+    }
+
     const def_governance_params = def_governance[1].params;
 
     challenging_period = def_governance_params?.challenging_period || 3 * 24 * 60 * 60;
     freeze_period = def_governance_params?.freeze_period || 30 * 24 * 60 * 60;
 
     const mid_price = ("mid_price" in governanceStateVars) ? governanceStateVars["mid_price"] : (("mid_price" in poolDefParams) ? poolDefParams.mid_price : paramList.mid_price.initValue);
-    
+
     let mid_price_decimals;
     let x_decimals;
     let y_decimals;
 
     if (mid_price !== 0) {
       try {
-        x_decimals = await client.api.getDecimalsBySymbolOrAsset(tokenRegistryAddress, poolDefParams.x_asset);
+        if (isBot) {
+          x_decimals = await http.getDecimalsBySymbolOrAsset(tokenRegistryAddress, poolDefParams.x_asset);
+        } else {
+          x_decimals = await client.api.getDecimalsBySymbolOrAsset(tokenRegistryAddress, poolDefParams.x_asset);
+        }
       } catch {
         x_decimals = 0;
       }
 
       try {
-        y_decimals = await client.api.getDecimalsBySymbolOrAsset(tokenRegistryAddress, poolDefParams.y_asset);
+        if (isBot) {
+          y_decimals = await http.getDecimalsBySymbolOrAsset(tokenRegistryAddress, poolDefParams.y_asset);
+        } else {
+          y_decimals = await client.api.getDecimalsBySymbolOrAsset(tokenRegistryAddress, poolDefParams.y_asset);
+        }
       } catch {
         y_decimals = 0;
       }

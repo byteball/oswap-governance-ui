@@ -8,8 +8,8 @@ export const poolsSlice = createSlice({
   initialState: {
     pools: {},
     status: "loading",
-    active: undefined,
-    activeStatus: undefined
+    active: null,
+    activeStatus: null
   },
   reducers: {
     changeActivePool: (state, action) => {
