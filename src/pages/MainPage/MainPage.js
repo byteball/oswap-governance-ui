@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
-import { message, Typography } from "antd";
+import { message } from "antd";
 import obyte from "obyte";
+import { Helmet } from "react-helmet-async";
 
 import { selectActivePool, selectActivePoolLoadingStatus, selectPools, selectPoolsLoadingStatus } from "store/slices/poolsSlice";
 import { WalletBalance } from "components/WalletBalance/WalletBalance";
@@ -75,6 +76,11 @@ export const MainPage = () => {
   if (status === "loading" && !isBot) return <div className={styles.dataLoaderWrap}><Spin size="large" /></div>
 
   return <div>
+    {activePool?.address ? <Helmet>
+      <meta property="og:title" content={`Oswap.io governance | Change parameters of ${activePool?.x_symbol} - ${activePool?.y_symbol}`} data-rh="true" />
+      <title>Oswap.io governance | Change parameters of {activePool?.x_symbol} - {activePool?.y_symbol}</title>
+    </Helmet> : <Helmet><title>Oswap.io governance</title><meta property="og:title" content="Oswap.io governance" data-rh="true" /></Helmet>}
+
     {location.pathname !== "/" ? <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 40, flexDirection: moveToNewLine ? "column" : "row", backgroundColor: !moveToNewLine ? "#24292F" : "transparent", borderRadius: 25 }}>
       <SelectPool disabled={activePoolStatus === "loading"} styles={{ width: `${moveToNewLine ? 100 : 90}%` }} />
       <div style={{ width: moveToNewLine ? "100%" : "15%", paddingRight: 15, textAlign: "center" }}>
