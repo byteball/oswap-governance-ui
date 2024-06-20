@@ -16,7 +16,7 @@ export const AppLayout = ({ children }) => <div>
   <Footer className={styles.footer}>
     <SocialIcons centered />
     <div className={styles.copyWrap}>
-      &copy; <a href="https://obyte.org" target="_blank" rel="noopener">Obyte</a>
+      <a href="https://obyte.org" target="_blank" rel="noopener">Built on Obyte</a>
     </div>
   </Footer>
 </div>
