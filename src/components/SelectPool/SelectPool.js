@@ -8,7 +8,7 @@ import { MAX_LENGTH_RECENT_LIST, selectRecentPools } from "store/slices/settings
 import { paramList } from "paramList";
 import { useNavigate } from "react-router-dom";
 
-export const SelectPool = ({ styles, disabled }) => {
+export const SelectPool = ({ styles, disabled, className }) => {
   // hooks
   const pools = useSelector(selectPools);
   const recentPools = useSelector(selectRecentPools);
@@ -23,13 +23,13 @@ export const SelectPool = ({ styles, disabled }) => {
   }, []);
 
 
-  //handles
+  // handles
   const handleChangePool = (pool) => {
     navigate(`/${pool}`);
     ref.current.blur();
   }
 
-  return <div style={{ backgroundColor: "#24292F", padding: 15, boxSizing: "border-box", borderRadius: 25, ...styles }}>
+  return <div style={{ backgroundColor: "#24292F", padding: 15, boxSizing: "border-box", borderRadius: 25, ...styles }} className={className}>
     <div>
       <Select disabled={disabled} ref={ref} showSearch={true} optionFilterProp="label" style={{ width: "100%", userSelect: "none", fontSize: 18 }} value={activePool?.address} bordered={false} size="large" placeholder="Select a pool" onChange={handleChangePool}>
         {(Object.keys(pools).length < MAX_LENGTH_RECENT_LIST) ? <>

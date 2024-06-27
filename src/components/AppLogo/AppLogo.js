@@ -1,9 +1,9 @@
+import { Link } from "react-router-dom";
+
 import styles from "./AppLogo.module.css";
 
-export const AppLogo = () => {
-  return <div className={styles.logoWrap}>
-    <a href={process.env.REACT_APP_MAIN_APP_URL}>
-      <img src="/logo.svg" className={styles.logo} alt="Oswap" />
-    </a>
-  </div>
-}
+export const AppLogo = () => <div className={styles.logoWrap}>
+  <Link to="/">
+    <img src="/logo.svg" className={styles.logo} alt="Oswap" />
+  </Link>
+</div>

@@ -1,16 +1,20 @@
 import { RightOutlined } from "@ant-design/icons";
 import { List } from "antd";
-
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+import { Spin } from "components/Spin/Spin";
+
 import { paramList } from "paramList";
-import { selectPools } from "store/slices/poolsSlice";
+import { selectPools, selectPoolsLoadingStatus } from "store/slices/poolsSlice";
 
 import styles from "./PoolsList.module.css";
 
 export const PoolsList = () => {
     const pools = useSelector(selectPools);
+    const status = useSelector(selectPoolsLoadingStatus);
+
+    if (status === "loading") return <div className={styles.spinWrap}><Spin size="large" /></div>
 
     return <List
         className={styles.list}
