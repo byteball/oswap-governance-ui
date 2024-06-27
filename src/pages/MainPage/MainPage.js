@@ -19,6 +19,7 @@ import { useWindowSize } from "hooks/useWindowSize";
 
 import styles from "./MainPage.module.css";
 import { botCheck } from "utils/botCheck";
+import { PageLayout } from "components/PageLayout/PageLayout";
 
 export const MainPage = () => {
   // hooks
@@ -75,7 +76,7 @@ export const MainPage = () => {
 
   if (status === "loading" && !isBot) return <div className={styles.dataLoaderWrap}><Spin size="large" /></div>
 
-  return <div>
+  return <PageLayout>
     {activePool?.address ? <Helmet>
       <meta property="og:title" content={`Oswap.io governance | Change parameters of ${activePool?.x_symbol} - ${activePool?.y_symbol}`} data-rh="true" />
       <title>Oswap.io governance | Change parameters of {activePool?.x_symbol} - {activePool?.y_symbol}</title>
@@ -119,5 +120,5 @@ export const MainPage = () => {
         />
       </div>
     </>}
-  </div>
+  </PageLayout>
 }

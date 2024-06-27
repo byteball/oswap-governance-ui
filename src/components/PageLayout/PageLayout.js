@@ -3,11 +3,11 @@ import { Layout } from "antd";
 import { AppLogo } from "components/AppLogo/AppLogo";
 import { SocialIcons } from "components/SocialIcons/SocialIcons";
 
-import styles from "./AppLayout.module.css";
+import styles from "./PageLayout.module.css";
 
 const { Content, Footer} = Layout;
 
-export const AppLayout = ({ children }) => <div>
+export const PageLayout = ({ children }) => <div>
   <Content className={styles.container}>
     <div style={{ margin: "0 auto" }}><AppLogo /></div>
     {children}

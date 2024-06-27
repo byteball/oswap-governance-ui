@@ -7,7 +7,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import 'antd/dist/antd.dark.less';
 
 import { Spin } from 'components/Spin/Spin';
-import { AppLayout } from 'components/AppLayout/AppLayout';
 import AppRouter from './AppRouter';
 
 import getStore from "./store";
@@ -21,9 +20,7 @@ ReactDOM.render(
     <Provider store={store}>
       <HelmetProvider>
         <PersistGate loading={<Spin size="large" />} persistor={persistor}>
-          <AppLayout>
-            <AppRouter />
-          </AppLayout>
+          <AppRouter />
         </PersistGate>
       </HelmetProvider>
     </Provider>
