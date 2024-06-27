@@ -1,4 +1,4 @@
-import { MainPage } from "pages";
+import { MainPage, PoolPage } from "pages";
 import { useEffect } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
@@ -19,7 +19,7 @@ const AppRouter = () => {
     <Routes>
       <Route path="/">
         <Route index element={<MainPage />} />
-        <Route path=":pool" element={<MainPage />} />
+        <Route path=":pool" element={<PoolPage />} />
       </Route>
     </Routes>
   </BrowserRouter>
