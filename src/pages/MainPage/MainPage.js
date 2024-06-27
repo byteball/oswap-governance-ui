@@ -4,6 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { message } from "antd";
 import obyte from "obyte";
 import { Helmet } from "react-helmet-async";
+import cn from "classnames";
 
 import { selectActivePool, selectActivePoolLoadingStatus, selectPools, selectPoolsLoadingStatus } from "store/slices/poolsSlice";
 import { WalletBalance } from "components/WalletBalance/WalletBalance";
@@ -82,12 +83,15 @@ export const MainPage = () => {
       <title>Oswap.io governance | Change parameters of {activePool?.x_symbol} - {activePool?.y_symbol}</title>
     </Helmet> : <Helmet><title>Oswap.io governance</title><meta property="og:title" content="Oswap.io governance" data-rh="true" /></Helmet>}
 
-    {location.pathname !== "/" ? <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 40, flexDirection: moveToNewLine ? "column" : "row", backgroundColor: !moveToNewLine ? "#24292F" : "transparent", borderRadius: 25 }}>
-      <SelectPool disabled={activePoolStatus === "loading"} styles={{ width: `${moveToNewLine ? 100 : 90}%` }} />
-      <div style={{ width: moveToNewLine ? "100%" : "15%", paddingRight: 15, textAlign: "center" }}>
+    {location.pathname !== "/" ? <div className={cn(styles.selectorWrap, { [styles.selectorWrapNewline]: moveToNewLine })}>
+      <SelectPool disabled={activePoolStatus === "loading"} className={styles.selector} />
+      <div className={styles.selectorLinks}>
         <a target="_blank" rel="noopener" href={activePool?.address ? `${process.env.REACT_APP_STATS_LINK}/pool/${activePool.address}` : process.env.REACT_APP_STATS_LINK}>
           View stats
         </a>
+        {activePool?.address ? <a target="_blank" rel="noopener" href={`https://oswap.io/add-liquidity/${activePool?.address}`}>
+          Add liquidity
+        </a> : null}
       </div>
     </div> : <div>
       <h1 style={{ textAlign: "center" }}>Oswap governance</h1>
