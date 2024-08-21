@@ -18,7 +18,7 @@ export const PoolsList = () => {
 
     return <List
         className={styles.list}
-        dataSource={Object.entries(pools)}
+        dataSource={Object.entries(pools).sort((a, b) => b[1].tvl - a[1].tvl)}
         renderItem={([address, pool]) => <PoolItem address={address} {...pool} />}
     />
 }
