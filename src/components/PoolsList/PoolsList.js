@@ -16,9 +16,11 @@ export const PoolsList = () => {
 
     if (status === "loading") return <div className={styles.spinWrap}><Spin size="large" /></div>
 
+    const dataSource = Object.entries(pools).sort((a, b) => (b[1].tvl || 0) - (a[1].tvl || 0));
+
     return <List
         className={styles.list}
-        dataSource={Object.entries(pools).sort((a, b) => b[1].tvl - a[1].tvl)}
+        dataSource={dataSource}
         renderItem={([address, pool]) => <PoolItem address={address} {...pool} />}
     />
 }

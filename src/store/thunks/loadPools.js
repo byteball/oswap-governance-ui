@@ -28,31 +28,22 @@ export const loadPools = createAsyncThunk(
     const pools = {};
     const getSymbols = [];
     const getSwapFee = [];
-    const getTvl = [];
-    const hours = Math.floor(Date.now() / 1000 / 3600); // hour number since unix epoch
+
+    const tvlGetter = axios.get(`${process.env.REACT_APP_STATS_LINK}/api/v1/yield`).then(({ data = [] }) => {
+      data.forEach(({ address, tvlUsd }) => {
+        if (address in pools) {
+          pools[address].tvl = tvlUsd;
+        } else {
+          console.log('log(tvl): address isn\'t found', address);
+        }
+      });
+    });
 
     Object.keys(stateVars).forEach(name => {
       const address = name.split("_")[1];
       const params = stateVars[name];
 
       pools[address] = Object.assign({}, params);
-
-      if (process.env.REACT_APP_AA_STATS_LINK) {
-        getTvl.push(
-          axios.post(`${process.env.REACT_APP_AA_STATS_LINK}/address/tvl`, {
-            address: address,
-            from: hours,
-            to: hours
-          }).then(({ data = [] }) => {
-            pools[address].tvl = data.reduce((acc, item) => acc + item.usd_balance, 0);
-          }).catch(() => {
-            console.log('log: error in getting tvl', address);
-            pools[address].tvl = 0;
-          })
-        )
-      } else {
-        console.log("We ignore sort because we don't have AA_STATS_LINK env variable");
-      }
 
       if (isBot) {
         getSymbols.push(
@@ -75,7 +66,7 @@ export const loadPools = createAsyncThunk(
       }
     })
 
-    await Promise.all([...getSymbols, ...getSwapFee, ...getTvl]);
+    await Promise.all([...getSymbols, ...getSwapFee, tvlGetter]);
 
     return pools;
   });
