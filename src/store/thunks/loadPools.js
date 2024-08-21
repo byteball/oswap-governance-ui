@@ -45,7 +45,6 @@ export const loadPools = createAsyncThunk(
             to: hours
           }).then(({ data = [] }) => {
             pools[address].tvl = data.reduce((acc, item) => acc + item.usd_balance, 0);
-            console.log('pools[address].tvl', pools[address].tvl)
           }).catch(() => {
             console.log('log: error in getting tvl', address);
             pools[address].tvl = 0;
